@@ -11,7 +11,7 @@
         </li>
     </ul>
     <div v-if='!loading && data && data.length'>
-        <NewUser :users='data'></NewUser>
+        <NewUser :users='data' @add-to-users='addNewUser'></NewUser>
     </div>
 
     <p v-if='loading'>Loading...</p>
@@ -31,6 +31,11 @@ export default {
     },
     props: {
         
+    },
+    methods: {
+        addNewUser(user) {
+            this.data.push(user)
+        }
     },
     setup() {
         // ref() marks these variables as reactive data. 

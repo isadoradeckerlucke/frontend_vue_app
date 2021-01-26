@@ -117,6 +117,7 @@ export default {
             .then((res) => {
                 // users.push(res.data)
                 // when I console.log I get the new user object. I just need to make sure it's adding to the list of users that's on the page from Users.vue.
+                this.$emit("add-to-users", res.data)
                 console.log(res.data)
             })
             .catch((e)=> {
