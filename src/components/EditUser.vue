@@ -1,6 +1,6 @@
 <template>
-    <form @submit.prevent='addUser'>
-        <h3>add a new user</h3>
+    <form @submit.prevent='editUser'>
+        <h3>edit this user</h3>
         <label for="name"><b>Name:</b></label>
         <input id="name" v-model='name'>
 
@@ -46,7 +46,7 @@
         <input id="geo_lng_address" v-model='geo_lng_address'>
 
 
-        <input class = 'button' type = 'submit' value = 'submit'>
+        <input class = 'button' type = 'submit' value = 'submit edits'>
 
     </form>
 </template>
@@ -57,36 +57,36 @@ import axios from 'axios'
 const BASE_URL = 'https://jsonplaceholder.typicode.com/users'
 
 export default {
-    name: 'NewUser',
+    name: 'EditUser',
     props: {
-        users: {
-            type: Array, 
+        user: {
+            type: Object, 
             required: true,
         }
     },
     data() {
         return {
-            name: "",
-            email: "",
-            username: "",
-            phone: "", 
-            website: "",
-            company_name: "",
-            company_catchPhrase: "",
-            company_bs: "",
-            street_address: "",
-            suite_address: "",
-            city_address: "",
-            zip_address: "",
-            geo_lat_address: "",
-            geo_lng_address: ""
+            name: this.user.name,
+            email: this.user.email,
+            username: this.user.username,
+            phone: this.user.phone, 
+            website: this.user.website,
+            company_name: this.user.company.name,
+            company_catchPhrase: this.user.company.catchPhrase,
+            company_bs: this.user.company.bs,
+            street_address: this.user.address.street,
+            suite_address: this.user.address.suite,
+            city_address: this.user.address.city,
+            zip_address: this.user.address.zipcode,
+            geo_lat_address: this.user.address.geo.lat,
+            geo_lng_address: this.user.address.geo.lng,
         }
     }, 
     computed: {
         // address, company are both computed or make all formData computed? 
     },
     methods: {
-        addUser() {
+        editUser() {
             let formData = {
                 name: this.name, 
                 username: this.username,
@@ -109,34 +109,18 @@ export default {
                     bs: this.company_bs
                 }
             }
-            axios.post(BASE_URL, formData, {
+            axios.patch(`${BASE_URL}/${this.user.id}`, formData, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
             .then((res) => {
-                this.$emit("add-to-users", res.data)
+                this.$emit("edit-user", res.data)
                 console.log(res.data)
             })
             .catch((e)=> {
                 console.log(e)
             })
-
-            // set values back to null
-            this.name = ""
-            this.email= ""
-            this.username= ""
-            this.phone= ""
-            this.website= ""
-            this.company_name= ""
-            this.company_catchPhrase= ""
-            this.company_bs= ""
-            this.street_address= ""
-            this.suite_address= ""
-            this.city_address= ""
-            this.zip_address= ""
-            this.geo_lat_address= ""
-            this.geo_lng_address= ""
         }
     }
 };
