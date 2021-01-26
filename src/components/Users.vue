@@ -19,6 +19,9 @@
 </template>
 
 <script>
+/** show all users listed. also renders NewUser component to show form for adding user.
+the editingObj at the specific user is toggled each time that the edit user button is clicked or the edit form is submitted. */
+
 import {ref, onMounted} from 'vue'
 import axios from 'axios'
 const BASE_URL = 'https://jsonplaceholder.typicode.com/users'
@@ -36,9 +39,11 @@ export default {
     },
     methods: {
         addNewUser(user) {
+            /** add new user to list of users */
             this.data.push(user)
         },
         deleteUser(user){
+            /** delete this user from list of users. */
             axios.delete(`${BASE_URL}/${user.id}`, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -52,10 +57,11 @@ export default {
             })
         },
         toggleEditForm(id){
+            /** toggle the editing boolean based on whether we are currently editing that user. */
             this.editingObj[id] = !this.editingObj[id]
         },
         editCurrentUser(newUserData){
-            // also hide edit form here! 
+            /** replace the current user with their new edited values, while maintaining the same index in array. toggle editing bool off when complete. */
             for(let i = 0; i < this.data.length; i++){
                 if(this.data[i].id === newUserData.id){
                     this.data.splice(i, 1, newUserData)
@@ -66,6 +72,7 @@ export default {
         }
     },
     setup() {
+        /** set up data variable and populate it with users, create loading variable so that it waits to display users until they are all loaded, create variables for toggling editing and storing errors. */
         // ref() marks these variables as reactive data. 
         const data = ref(null);
         const loading = ref(true);

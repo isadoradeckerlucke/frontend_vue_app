@@ -1,22 +1,22 @@
 <template>
     <form @submit.prevent='editUser'>
-        <h3>edit this user</h3>
+        <h3>edit {{this.user.name}}</h3>
         <label for="name"><b>Name:</b></label>
-        <input id="name" v-model='name'>
+        <input id="name" v-model='name'><br>
 
         <label for="username"><b>Username:</b></label>
-        <input id="username" v-model='username'>
+        <input id="username" v-model='username'><br>
 
         <label for="email"><b>Email:</b></label>
-        <input id="email" v-model='email'>
+        <input id="email" v-model='email'><br>
 
         <label for="phone"><b>Phone Number:</b></label>
-        <input id="phone" v-model='phone'>
+        <input id="phone" v-model='phone'><br>
 
         <label for="website"><b>Website:</b></label>
-        <input id="website" v-model='website'>
+        <input id="website" v-model='website'><br>
 
-        <label><b>Company</b></label>
+        <label><b>Company</b></label><br>
         <label for="company_name">Company Name:</label>
         <input id="company_name" v-model='company_name'>
 
@@ -24,9 +24,9 @@
         <input id="company_catchPhrase" v-model='company_catchPhrase'>
 
         <label for="company_bs">Company BS:</label>
-        <input id="company_bs" v-model='company_bs'>
+        <input id="company_bs" v-model='company_bs'><br>
 
-        <label><b>Address:</b></label>
+        <label><b>Address:</b></label><br>
         <label for="street_address">Street:</label>
         <input id="street_address" v-model='street_address'>
 
@@ -34,7 +34,7 @@
         <input id="suite_address" v-model='suite_address'>
 
         <label for="city_address">City:</label>
-        <input id="city_address" v-model='city_address'>
+        <input id="city_address" v-model='city_address'><br>
 
         <label for="zip_address">Zipcode:</label>
         <input id="zip_address" v-model='zip_address'>
@@ -43,16 +43,17 @@
         <input id="geo_lat_address" v-model='geo_lat_address'>
 
         <label for="geo_lng_address">Longitude:</label>
-        <input id="geo_lng_address" v-model='geo_lng_address'>
+        <input id="geo_lng_address" v-model='geo_lng_address'><br>
 
-
-        <input class = 'button' type = 'submit' value = 'submit edits'>
+        <input class = 'button' type = 'submit' value = 'submit'>
 
     </form>
 </template>
 
 <script>
-// import {ref} from 'vue'
+/** a form for editing one user. 
+displays only if editing variable is set to true for specific user. */
+
 import axios from 'axios'
 const BASE_URL = 'https://jsonplaceholder.typicode.com/users'
 
@@ -65,6 +66,7 @@ export default {
         }
     },
     data() {
+        /** initialize data for editing to the existing user values -- only need to change what you want to */
         return {
             name: this.user.name,
             email: this.user.email,
@@ -82,11 +84,9 @@ export default {
             geo_lng_address: this.user.address.geo.lng,
         }
     }, 
-    computed: {
-        // address, company are both computed or make all formData computed? 
-    },
     methods: {
         editUser() {
+            /** patch request to edit the user (could have been put as well since we're technically updating every value even if they don't change it, but patch makes future refactoring/improvements to this process easier). */
             let formData = {
                 name: this.name, 
                 username: this.username,

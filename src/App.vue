@@ -3,6 +3,7 @@
 </template>
 
 <script>
+/** render the Users component, set basic styles. */
 import Users from './components/Users.vue'
 
 export default {
