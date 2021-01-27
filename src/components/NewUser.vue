@@ -5,12 +5,15 @@
             <div class="row">
                 <div class="col-sm">
                     <input id="name" v-model='name' alt='name' type='text' class = 'form-control' placeholder="name">
+                    <div class = 'nameErrors'></div>
                 </div>
                 <div class="col-sm">
                     <input id="username" v-model='username' alt='username' type='text' class = 'form-control' placeholder="username">
+                    <div class = 'usernameErrors'></div>
                 </div>
                 <div class="col-sm">
                     <input id="email" v-model='email' alt='email' type='text' class = 'form-control' placeholder="email">
+                    <div class = 'emailErrors'></div>
                 </div>
             </div><br>
             <div class="row">
@@ -60,7 +63,7 @@
 
         <input class = 'btn btn-outline-success' type = 'submit' value = 'submit'>
 
-    </form>
+    </form><br>
 </template>
 
 <script>
@@ -96,7 +99,38 @@ export default {
         }
     }, 
     methods: {
-        addUser() {
+        validate(data){
+            /** check that there are values inputted for name, username and email. add error messages to all fields that are missing. return false if it fails validation, true if it passes*/
+            let nameErrors = document.querySelector('.nameErrors')
+            let usernameErrors = document.querySelector('.usernameErrors')
+            let emailErrors = document.querySelector('.emailErrors')
+
+            if(data.name === ''){
+                nameErrors.innerHTML = 'please enter a value for name'
+            } else {
+                nameErrors.innerHTML = ''
+            }
+
+            if(data.username === ''){
+                usernameErrors.innerHTML = 'please enter a value for username'
+            } else {
+                usernameErrors.innerHTML = ''
+            }
+
+            if(data.email === ''){
+                emailErrors.innerHTML = 'please enter a value for email'
+            } else {
+                emailErrors.innerHTML = ''
+            }
+
+            if(data.email === '' || data.username === '' || data.name === ''){
+                return false;
+            } else {
+                return true;
+            }
+
+        },
+        async addUser() {
             /** create formData object with all inputted values, and post it with axios. */
             let formData = {
                 name: this.name, 
@@ -120,6 +154,11 @@ export default {
                     bs: this.company_bs
                 }
             }
+
+            if (!this.validate(formData)){
+                return;
+            }
+
             axios.post(BASE_URL, formData, {
                 headers: {
                     'Content-Type': 'application/json'
