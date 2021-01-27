@@ -1,17 +1,32 @@
 <template>
     <h1>Users</h1>
     <!-- if it's done loading and there is data -->
-    <ul v-if='!loading && data && data.length'> 
-        <li v-for='user of data' :key = 'user.id'>
-            <p>{{user.name}}, {{user.username}}, {{user.email}}</p>
-
-            <button @click='toggleEditForm(user.id)'>edit user</button>
+    <table v-if='!loading && data && data.length' class="table table-hover">
+    <thead>
+        <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Username</th>
+        <th scope="col">Email</th>
+        <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr v-for='user of data' :key = 'user.id' >
+        <td>{{user.name}}</td>
+        <td>{{user.username}}</td>
+        <td>{{user.email}}</td>
+        <td>
+            <button @click='toggleEditForm(user.id)' class = 'btn btn-outline-info'><BIconPencil></BIconPencil></button>
             <EditUser v-show='editingObj[user.id]' :user='user' @edit-user='editCurrentUser'></EditUser>
-            <button @click='deleteUser(user)'>delete user</button>
-        </li>
-    </ul>
+            <button @click='deleteUser(user)' v-show='!editingObj[user.id]' class = 'btn btn-outline-danger'><BIconXCircle></BIconXCircle></button>
+        </td>
+        </tr>
+    </tbody>
+    </table>
+
     <div v-if='!loading && data && data.length'>
-        <NewUser :users='data' @add-to-users='addNewUser'></NewUser>
+        <button @click='toggleAdding()' class = 'btn btn-lg btn-block btn-outline-success'><BIconPersonPlus></BIconPersonPlus></button>
+        <NewUser :users='data' @add-to-users='addNewUser' v-show='addingUser'></NewUser>
     </div>
 
     <p v-if='loading'>Loading...</p>
@@ -27,12 +42,16 @@ import axios from 'axios'
 const BASE_URL = 'https://jsonplaceholder.typicode.com/users'
 import NewUser from './NewUser.vue'
 import EditUser from './EditUser.vue'
+import {BIconPencil, BIconXCircle, BIconPersonPlus} from 'bootstrap-icons-vue'
 
 export default {
     name: 'Users', 
     components: {
         NewUser,
         EditUser,
+        BIconPencil,
+        BIconXCircle,
+        BIconPersonPlus
     },
     props: {
         
@@ -41,6 +60,7 @@ export default {
         addNewUser(user) {
             /** add new user to list of users */
             this.data.push(user)
+            this.toggleAdding()
         },
         deleteUser(user){
             /** delete this user from list of users. */
@@ -69,6 +89,9 @@ export default {
             }
 
             this.toggleEditForm(newUserData.id)
+        },
+        toggleAdding() {
+            this.addingUser = !this.addingUser
         }
     },
     setup() {
@@ -78,6 +101,7 @@ export default {
         const loading = ref(true);
         const error = ref(null);
         const editingObj = ref({})
+        const addingUser = ref(false)
 
         function getUsers(){
             loading.value = true;
@@ -110,7 +134,8 @@ export default {
             data, 
             loading, 
             error, 
-            editingObj
+            editingObj,
+            addingUser
         }
     }
 }
