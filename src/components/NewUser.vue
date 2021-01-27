@@ -73,6 +73,7 @@ const BASE_URL = 'https://jsonplaceholder.typicode.com/users'
 
 export default {
     name: 'NewUser',
+    emits: ['add-to-users'],
     props: {
         users: {
             type: Array, 
@@ -130,7 +131,7 @@ export default {
             }
 
         },
-        async addUser() {
+        addUser() {
             /** create formData object with all inputted values, and post it with axios. */
             let formData = {
                 name: this.name, 
@@ -166,7 +167,6 @@ export default {
             })
             .then((res) => {
                 this.$emit("add-to-users", res.data)
-                console.log(res.data)
             })
             .catch((e)=> {
                 console.log(e)

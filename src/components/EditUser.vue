@@ -129,7 +129,6 @@ export default {
             })
             .then((res) => {
                 this.$emit("edit-user", res.data)
-                console.log(res.data)
             })
             .catch((e)=> {
                 console.log(e)

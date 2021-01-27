@@ -25,8 +25,8 @@
     </table>
 
     <div v-if='!loading && data && data.length'>
-        <button @click='toggleAdding()' class = 'btn btn-lg btn-block btn-outline-success'><BIconPersonPlus></BIconPersonPlus></button>
-        <NewUser :users='data' @add-to-users='addNewUser' v-show='addingUser'></NewUser>
+        <button @click='toggleAdding' class = 'btn btn-lg btn-block btn-outline-success'><BIconPersonPlus></BIconPersonPlus></button>
+        <div v-show='addingUser'><NewUser :users='data' @add-to-users='addNewUser'></NewUser></div>
     </div>
 
     <p v-if='loading'>Loading...</p>
@@ -53,14 +53,11 @@ export default {
         BIconXCircle,
         BIconPersonPlus
     },
-    props: {
-        
-    },
     methods: {
         addNewUser(user) {
             /** add new user to list of users */
-            this.data.push(user)
             this.toggleAdding()
+            this.data.push(user)
         },
         deleteUser(user){
             /** delete this user from list of users. */
